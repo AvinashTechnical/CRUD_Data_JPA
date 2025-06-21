@@ -4,6 +4,7 @@ package com.springDataJPA.Emp.Controller;
 import com.springDataJPA.Emp.Emp;
 import com.springDataJPA.Emp.Service.EmpServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,30 +20,38 @@ public class empController {
         this.empService = empService;
     }
 
-    @PostMapping     // we are create a user..........
-    public Emp createEmp(@RequestBody Emp emp){
-        return empService.createEmp(emp);
+    @PostMapping
+    public ResponseEntity<Emp> createEmp(@RequestBody Emp emp) {
+        Emp createdEmp = empService.createEmp(emp);
+        return ResponseEntity.status(201).body(createdEmp);  // HTTP 201 Created
     }
 
-    @PutMapping("/{id}")    // update the emp using id.........
-    public Emp updateEmp(@PathVariable Integer id,@RequestBody Emp emp){
-        return empService.updateEmp(id,emp);
+    // Update an existing employee by ID
+    @PutMapping("/{id}")
+    public ResponseEntity<Emp> updateEmp(@PathVariable Integer id, @RequestBody Emp emp) {
+        Emp updatedEmp = empService.updateEmp(id, emp);
+        return ResponseEntity.ok(updatedEmp);  // HTTP 200 OK
     }
 
-    @GetMapping("/{id}")   // find the emp by id............
-    public Emp getEmpById(@PathVariable Integer id){
-        return empService.getEmpById(id);
+    // Get an employee by ID
+    @GetMapping("/{id}")
+    public ResponseEntity<Emp> getEmpById(@PathVariable Integer id) {
+        Emp emp = empService.getEmpById(id);
+        return ResponseEntity.ok(emp);  // HTTP 200 OK
     }
 
-
-    @GetMapping       // getting the all emp............
-    public List<Emp> allEmp(){
-        return empService.allEmp();
+    // Get all employees
+    @GetMapping
+    public ResponseEntity<List<Emp>> allEmp() {
+        List<Emp> empList = empService.allEmp();
+        return ResponseEntity.ok(empList);  // HTTP 200 OK
     }
 
+    // Delete an employee by ID
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Integer id){
+    public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
         empService.deleteUser(id);
+        return ResponseEntity.noContent().build();  // HTTP 204 No Content
     }
 
 }
